@@ -1,0 +1,16 @@
+services:
+  api:
+    build: .
+    working_dir: /app/api
+    volumes:
+      - ./:/app
+    ports:
+      - "8080:8080"
+    command: [ "lapis", "server" ]
+  db:
+    image: postgres:9.4
+    restart: always
+    environment:
+      POSTGRES_USER: rinhadebackend
+      POSTGRES_PASSWORD: rinhadebackend
+      POSTGRES_DB: rinhadebackend
