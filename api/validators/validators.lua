@@ -22,9 +22,7 @@ local function validate_data(year, month, day)
 end
 
 function M.is_valid_date(date)
-  if not is_valid_date_format(date) then return false end
-
-  local year, month, day = validate_data(date)
+  local year, month, day = is_valid_date_format(date)
   if year and month and day then
     return validate_data(year, month, day)
   end
