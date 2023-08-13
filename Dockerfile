@@ -17,5 +17,7 @@ RUN chown -R nobody:nobody /var/nginx/client_body_temp \
 RUN apk add openssl-dev
 
 RUN luarocks install lapis
+RUN luarocks install lapis-console
+RUN luarocks install tableshape
 
 STOPSIGNAL SIGQUIT
