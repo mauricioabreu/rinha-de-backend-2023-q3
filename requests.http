@@ -14,5 +14,5 @@ Content-Type: {{jsonContentType}}
 }
 
 ###
-
-GET {{apiURL}}/pessoas/b3f209da-7d62-4903-b0a7-a50aefdd01d5
+# @prompt id
+GET {{apiURL}}/pessoas/{{id}}
