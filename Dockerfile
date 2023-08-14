@@ -19,5 +19,6 @@ RUN apk add openssl-dev
 RUN luarocks install lapis
 RUN luarocks install lapis-console
 RUN luarocks install tableshape
+RUN luarocks install luacheck
 
 STOPSIGNAL SIGQUIT

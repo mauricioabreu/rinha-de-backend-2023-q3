@@ -3,7 +3,7 @@
 
 ###
 
-POST {{apiURL}}
+POST {{apiURL}}/pessoas
 Content-Type: {{jsonContentType}}
 
 {
@@ -12,3 +12,7 @@ Content-Type: {{jsonContentType}}
     "nascimento": "2000-10-01",
     "stack": ["C#", "Node", "Oracle"]
 }
+
+###
+
+GET {{apiURL}}/pessoas/b3f209da-7d62-4903-b0a7-a50aefdd01d5
