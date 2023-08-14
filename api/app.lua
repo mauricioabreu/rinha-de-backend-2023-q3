@@ -36,10 +36,10 @@ app:get("/pessoas/:id", function(self)
   return { json = person }
 end)
 
-app:match("/console", console.make())
-
 app:get("/contagem-pessoas", function()
   return tostring(People:count()), { layout = false, status = 200 }
 end)
+
+app:match("/console", console.make())
 
 return app
