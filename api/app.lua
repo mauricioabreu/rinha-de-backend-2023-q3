@@ -39,7 +39,7 @@ end)
 app:match("/console", console.make())
 
 app:get("/contagem-pessoas", function()
-  return People:count()
+  return tostring(People:count()), { layout = false, status = 200 }
 end)
 
 return app

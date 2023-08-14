@@ -16,3 +16,8 @@ Content-Type: {{jsonContentType}}
 ###
 # @prompt id
 GET {{apiURL}}/pessoas/{{id}}
+
+
+###
+
+GET {{apiURL}}/contagem-pessoas
