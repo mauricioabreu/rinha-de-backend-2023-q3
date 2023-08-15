@@ -39,7 +39,10 @@ end)
 
 app:get("/pessoas", function(self)
   local term = self.params.t
-  local people = db.query("SELECT * FROM pessoas WHERE apelido % ? OR nome % ? OR stack::text % ?", term, term, term)
+  local people = db.query(
+    "SELECT * FROM pessoas WHERE apelido % ? OR nome % ? OR stack::text % ? LIMIT 50",
+    term, term, term
+  )
   return { json = people }
 end)
 
