@@ -9,6 +9,8 @@ services:
     depends_on:
       - db
     command: [ "lapis", "server" ]
+    environment:
+      - LAPIS_ENVIRONMENT=${LAPIS_ENVIRONMENT}
     deploy:
       resources:
         limits:
@@ -24,6 +26,8 @@ services:
     depends_on:
       - db
     command: [ "lapis", "server" ]
+    environment:
+      - LAPIS_ENVIRONMENT=${LAPIS_ENVIRONMENT}
     deploy:
       resources:
         limits:
