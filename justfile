@@ -8,8 +8,9 @@ stop:
 
 # Reload server
 reload:
-    docker compose exec api lapis build
+    docker compose exec api1 lapis build
+    docker compose exec api2 lapis build
 
 # Lint lua code
 lualint:
-    docker compose run --rm api luacheck .
+   docker run -v $(pwd):/app ghcr.io/lunarmodules/luacheck:latest /app
