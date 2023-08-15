@@ -1,5 +1,6 @@
 local lapis = require("lapis")
 local console = require("lapis.console")
+local db = require("lapis.db")
 local Model = require("lapis.db.model").Model
 local json_params = require("lapis.application").json_params
 local capture_errors_json = require("exception").custom_capture_errors_json
@@ -34,6 +35,12 @@ app:get("/pessoas/:id", function(self)
     return { status = 404, layout = false }
   end
   return { json = person }
+end)
+
+app:get("/pessoas", function(self)
+  local term = self.params.t
+  local people = db.query("SELECT * FROM pessoas WHERE apelido % ? OR nome % ? OR stack::text % ?", term, term, term)
+  return { json = people }
 end)
 
 app:get("/contagem-pessoas", function()

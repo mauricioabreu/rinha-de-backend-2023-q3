@@ -21,3 +21,7 @@ GET {{apiURL}}/pessoas/{{id}}
 ###
 
 GET {{apiURL}}/contagem-pessoas
+
+###
+
+GET {{apiURL}}/pessoas?t=node
