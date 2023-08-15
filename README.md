@@ -25,3 +25,11 @@ Available recipes:
 ```
 
 Para rodar a aplicação, use `just start` e para parar a aplicação, use `just stop`.
+
+Há dois jeitos de rodar a API: modo *development* e modo *production*
+
+É possível passar o ambiente como variável de ambiente ao rodar a aplicação:
+
+```bash
+API_ENVIRONMENT=production just start
+```

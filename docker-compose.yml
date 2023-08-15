@@ -10,7 +10,7 @@ services:
       - db
     command: [ "lapis", "server" ]
     environment:
-      - LAPIS_ENVIRONMENT=${LAPIS_ENVIRONMENT}
+      - LAPIS_ENVIRONMENT=${API_ENVIRONMENT}
     deploy:
       resources:
         limits:
@@ -27,7 +27,7 @@ services:
       - db
     command: [ "lapis", "server" ]
     environment:
-      - LAPIS_ENVIRONMENT=${LAPIS_ENVIRONMENT}
+      - LAPIS_ENVIRONMENT=${API_ENVIRONMENT}
     deploy:
       resources:
         limits:
