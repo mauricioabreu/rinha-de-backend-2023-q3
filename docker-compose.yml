@@ -1,0 +1,61 @@
+services:
+  api1:
+    build: .
+    working_dir: /app/api
+    volumes:
+      - ./:/app
+    ports:
+      - "80"
+    depends_on:
+      - db
+    command: [ "lapis", "server" ]
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '0.5GB'
+  api2:
+    build: .
+    working_dir: /app/api
+    volumes:
+      - ./:/app
+    ports:
+      - "80"
+    depends_on:
+      - db
+    command: [ "lapis", "server" ]
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '0.5GB'
+  lb:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api1
+      - api2
+    ports:
+      - "9999:9999"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '0.5GB'
+  db:
+    image: postgres:15.4
+    restart: always
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: rinhadebackend
+      POSTGRES_PASSWORD: rinhadebackend
+      POSTGRES_DB: rinhadebackend
+    deploy:
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: '1.5GB'

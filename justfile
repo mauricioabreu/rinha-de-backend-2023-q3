@@ -1,6 +1,10 @@
-# Run application DEV
-drun:
-    docker compose -f docker-compose-dev.yml up
+# Start application
+start:
+    docker compose up
+
+# Stop application
+stop:
+    docker compose down
 
 # Reload server
 reload:
