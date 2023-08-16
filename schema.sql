@@ -1,13 +1,16 @@
-CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE TEXT SEARCH CONFIGURATION TERM_SEARCH (COPY = portuguese);
+ALTER TEXT SEARCH CONFIGURATION TERM_SEARCH
+    ALTER MAPPING FOR hword, hword_part, word WITH portuguese_stem;
 
 CREATE TABLE IF NOT EXISTS pessoas (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     apelido VARCHAR(32) UNIQUE NOT NULL,
     nome VARCHAR(100) NOT NULL,
     nascimento DATE NOT NULL,
-    stack JSONB NULL
+    stack VARCHAR(1024),
+    TERM_SEARCH TSVECTOR GENERATED ALWAYS AS (
+        TO_TSVECTOR('TERM_SEARCH', nome || ' ' || apelido || ' ' || stack)
+    ) STORED
 );
 
-CREATE INDEX idx_gist_trgm_apelido ON pessoas USING GIST (apelido gist_trgm_ops);
-CREATE INDEX idx_gist_trgm_nome ON pessoas USING GIST (nome gist_trgm_ops);
-CREATE INDEX idx_gist_trgm_stack ON pessoas USING GIST ((stack::text) gist_trgm_ops);
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_pessoas_term_search ON PESSOAS USING GIN (TERM_SEARCH);

@@ -6,12 +6,18 @@ local json_params = require("lapis.application").json_params
 local capture_errors_json = require("exception").custom_capture_errors_json
 local with_params = require("lapis.validate").with_params
 local types = require("lapis.validate.types")
-local to_json = require("lapis.util").to_json
 local custom_types = require("validators.types")
+local split = require("pl.utils").split
 
 local app = lapis.Application()
 
 local People = Model:extend("pessoas")
+
+local function repr_person(person)
+  person.term_search = nil
+  person.stack = split(person.stack, ",")
+  return person
+end
 
 app:post("/pessoas", capture_errors_json(422, json_params(with_params({
   { "apelido",    types.limited_text(256) },
@@ -23,7 +29,7 @@ app:post("/pessoas", capture_errors_json(422, json_params(with_params({
     apelido = params.apelido,
     nome = params.nome,
     nascimento = params.nascimento,
-    stack = to_json(params.stack)
+    stack = table.concat(params.stack, ",")
   })
 
   return { layout = false, status = 201, headers = { "Location: /" .. person.id } }
@@ -34,15 +40,21 @@ app:get("/pessoas/:id", function(self)
   if not person then
     return { status = 404, layout = false }
   end
-  return { json = person }
+  return { json = repr_person(person) }
 end)
 
 app:get("/pessoas", function(self)
   local term = self.params.t
-  local people = db.query(
-    "SELECT * FROM pessoas WHERE apelido % ? OR nome % ? OR stack::text % ? LIMIT 50",
-    term, term, term
+  local result = db.query(
+    "SELECT * FROM pessoas WHERE TO_TSQUERY('TERM_SEARCH', ?) @@ TERM_SEARCH LIMIT 50",
+    term
   )
+
+  local people = {}
+  for _, person in ipairs(result) do
+    table.insert(people, repr_person(person))
+  end
+
   return { json = people }
 end)
 
