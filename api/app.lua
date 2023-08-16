@@ -27,7 +27,7 @@ local function repr_person(person)
   return person
 end
 
-app:post("/pessoas", capture_errors_json(422, json_params(with_params({
+app:post("/pessoas", capture_errors_json(400, json_params(with_params({
   { "apelido",    types.limited_text(256) },
   { "nome",       types.limited_text(100) },
   { "nascimento", custom_types.is_valid_date },
