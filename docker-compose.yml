@@ -15,7 +15,7 @@ services:
       resources:
         limits:
           cpus: '0.15'
-          memory: '0.5GB'
+          memory: '250MB'
   api2:
     build: .
     working_dir: /app/api
@@ -32,7 +32,7 @@ services:
       resources:
         limits:
           cpus: '0.15'
-          memory: '0.5GB'
+          memory: '250MB'
   lb:
     image: nginx:latest
     volumes:
@@ -46,12 +46,13 @@ services:
       resources:
         limits:
           cpus: '0.25'
-          memory: '0.5GB'
+          memory: '500MB'
   db:
     image: postgres:15.4
     restart: always
     volumes:
       - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - ./postgresql.conf:/etc/postgresql/postgresql.conf
     ports:
       - "5432:5432"
     environment:
@@ -62,4 +63,10 @@ services:
       resources:
         limits:
           cpus: '0.95'
-          memory: '1.5GB'
+          memory: '2GB'
+    command:
+      [
+        "postgres",
+        "-c",
+        "config_file=/etc/postgresql/postgresql.conf"
+      ]

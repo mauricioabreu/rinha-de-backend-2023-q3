@@ -31,9 +31,9 @@ function randomString(length) {
 
 export const options = {
     stages: [
-        { duration: '1m', target: 500 },
+        { duration: '30s', target: 500 },
         { duration: '1m', target: 800 },
-        { duration: '1m', target: 0 },
+        { duration: '30s', target: 0 },
     ],
 };
 
