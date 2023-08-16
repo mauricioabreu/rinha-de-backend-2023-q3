@@ -27,12 +27,23 @@ local function repr_person(person)
   return person
 end
 
-app:post("/pessoas", capture_errors_json(400, json_params(with_params({
-  { "apelido",    types.limited_text(256) },
+local person_params = types.params_shape({
+  { "apelido",    types.limited_text(32) },
   { "nome",       types.limited_text(100) },
   { "nascimento", custom_types.is_valid_date },
   { "stack",      types.array_of(types.limited_text(32)) }
-}, function(_, params)
+})
+
+app:post("/pessoas", json_params(function(self)
+  local params, err = person_params:transform(self.params)
+  if err ~= nil then
+    if self.params.apelido == nil or self.params.nome == nil then
+      return { json = { errors = err }, status = 422 }
+    end
+
+    return { json = { errors = err }, status = 400 }
+  end
+
   local person, err = People:create({
     apelido = params.apelido,
     nome = params.nome,
@@ -41,11 +52,11 @@ app:post("/pessoas", capture_errors_json(400, json_params(with_params({
   })
 
   if err ~= nil then
-    return { layout = false, status = 422 }
+    return { json = { errors = err }, status = 422 }
   end
 
   return { layout = false, status = 201, headers = { "Location: /" .. person.id } }
-end))))
+end))
 
 app:get("/pessoas/:id", function(self)
   local person = People:find(self.params.id)
