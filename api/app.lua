@@ -11,7 +11,15 @@ local split = require("pl.utils").split
 
 local app = lapis.Application()
 
-local People = Model:extend("pessoas")
+local People = Model:extend("pessoas", {
+  constraints = {
+    apelido = function(self, value)
+      if self:check_unique_constraint("apelido", value) then
+        return value .. " already exists"
+      end
+    end
+  }
+})
 
 local function repr_person(person)
   person.term_search = nil
@@ -25,12 +33,16 @@ app:post("/pessoas", capture_errors_json(422, json_params(with_params({
   { "nascimento", custom_types.is_valid_date },
   { "stack",      types.array_of(types.limited_text(32)) }
 }, function(_, params)
-  local person = People:create({
+  local person, err = People:create({
     apelido = params.apelido,
     nome = params.nome,
     nascimento = params.nascimento,
     stack = table.concat(params.stack, ",")
   })
+
+  if err ~= nil then
+    return { layout = false, status = 422 }
+  end
 
   return { layout = false, status = 201, headers = { "Location: /" .. person.id } }
 end))))
