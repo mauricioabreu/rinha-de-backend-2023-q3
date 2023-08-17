@@ -22,6 +22,10 @@ GET {{apiURL}}/pessoas/{{id}}
 
 GET {{apiURL}}/contagem-pessoas
 
-###
+### Valid request while using term search
 
 GET {{apiURL}}/pessoas?t=node
+
+### Invalid request while using term search
+
+GET {{apiURL}}/pessoas?t=

@@ -3,8 +3,6 @@ local console = require("lapis.console")
 local db = require("lapis.db")
 local Model = require("lapis.db.model").Model
 local json_params = require("lapis.application").json_params
-local capture_errors_json = require("exception").custom_capture_errors_json
-local with_params = require("lapis.validate").with_params
 local types = require("lapis.validate.types")
 local custom_types = require("validators.types")
 local split = require("pl.utils").split
@@ -31,7 +29,11 @@ local person_params = types.params_shape({
   { "apelido",    types.limited_text(32) },
   { "nome",       types.limited_text(100) },
   { "nascimento", custom_types.is_valid_date },
-  { "stack",      types.array_of(types.limited_text(32)) }
+  { "stack",      types.one_of({ types.userdata, types.array_of(types.limited_text(32)) }) }
+})
+
+local search_params = types.params_shape({
+  { "t", types.limited_text(1024, 1) }
 })
 
 app:post("/pessoas", json_params(function(self)
@@ -42,6 +44,10 @@ app:post("/pessoas", json_params(function(self)
     end
 
     return { json = { errors = err }, status = 400 }
+  end
+
+  if type(params.stack) == "userdata" then
+    params.stack = {}
   end
 
   local person, err = People:create({
@@ -67,10 +73,14 @@ app:get("/pessoas/:id", function(self)
 end)
 
 app:get("/pessoas", function(self)
-  local term = self.params.t
+  local params, err = search_params:transform(self.params)
+  if err ~= nil then
+    return { json = { errors = err }, status = 400 }
+  end
+
   local result = db.query(
     "SELECT * FROM pessoas WHERE TO_TSQUERY('TERM_SEARCH', ?) @@ TERM_SEARCH LIMIT 50",
-    term
+    params.t
   )
 
   local people = {}
