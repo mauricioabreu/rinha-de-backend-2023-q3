@@ -24,7 +24,7 @@ GET {{apiURL}}/contagem-pessoas
 
 ### Valid request while using term search
 
-GET {{apiURL}}/pessoas?t=node
+GET {{apiURL}}/pessoas?t=bert
 
 ### Invalid request while using term search
 

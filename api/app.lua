@@ -85,8 +85,8 @@ app:get("/pessoas", function(self)
   end
 
   local result = db.query(
-    "SELECT * FROM pessoas WHERE PLAINTO_TSQUERY('TERM_SEARCH', ?) @@ TERM_SEARCH LIMIT 50",
-    params.t
+    "SELECT * FROM pessoas WHERE term_search LIKE ? LIMIT 50",
+    "%" .. params.t .. "%"
   )
 
   local people = {}
