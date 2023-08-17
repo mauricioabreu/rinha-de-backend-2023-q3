@@ -61,7 +61,13 @@ app:post("/pessoas", json_params(function(self)
     return { json = { errors = err }, status = 422 }
   end
 
-  return { layout = false, status = 201, headers = { "Location: /" .. person.id } }
+  return {
+    layout = false,
+    status = 201,
+    headers = {
+      ["Location"] = "/pessoas/" .. person.id
+    }
+  }
 end))
 
 app:get("/pessoas/:id", function(self)
