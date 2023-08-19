@@ -7,7 +7,7 @@ POST {{apiURL}}/pessoas
 Content-Type: {{jsonContentType}}
 
 {
-    "apelido": "josé",
+    "apelido": "josé{{$randomInt 1 1000}}{{$timestamp}}",
     "nome": "José Roberto",
     "nascimento": "2000-10-01",
     "stack": ["C#", "Node", "Oracle"]
@@ -24,7 +24,8 @@ GET {{apiURL}}/contagem-pessoas
 
 ### Valid request while using term search
 
-GET {{apiURL}}/pessoas?t=bert
+# @prompt term
+GET {{apiURL}}/pessoas?t={{term}}
 
 ### Invalid request while using term search
 
