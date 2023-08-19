@@ -14,7 +14,3 @@ reload:
 # Lint lua code
 lualint:
    docker run -v $(pwd):/app ghcr.io/lunarmodules/luacheck:latest /app
-
-# Run load testing
-loadtest:
-    docker run --rm -i grafana/k6 run - <load-testing/script.js
