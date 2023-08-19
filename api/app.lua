@@ -6,6 +6,7 @@ local json_params = require("lapis.application").json_params
 local types = require("lapis.validate.types")
 local custom_types = require("validators.types")
 local split = require("pl.utils").split
+local uuid = require("uuid")
 
 local app = lapis.Application()
 
@@ -51,6 +52,7 @@ app:post("/pessoas", json_params(function(self)
   end
 
   local person, err = People:create({
+    id = uuid(),
     apelido = params.apelido,
     nome = params.nome,
     nascimento = params.nascimento,

@@ -20,5 +20,6 @@ RUN luarocks install lapis
 RUN luarocks install lapis-console
 RUN luarocks install tableshape
 RUN luarocks install penlight
+RUN luarocks install uuid
 
 STOPSIGNAL SIGQUIT
