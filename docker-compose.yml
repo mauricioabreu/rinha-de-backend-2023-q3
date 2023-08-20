@@ -15,8 +15,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.15'
-          memory: '250MB'
+          cpus: '0.2'
+          memory: '512MB'
   api2:
     <<: *api
     container_name: api2
@@ -34,8 +34,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.25'
-          memory: '500MB'
+          cpus: '0.1'
+          memory: '128MB'
   db:
     container_name: db
     image: postgres:15.4
@@ -52,8 +52,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.95'
-          memory: '2GB'
+          cpus: '1.0'
+          memory: '1920MB'
     command:
       [
         "postgres",
