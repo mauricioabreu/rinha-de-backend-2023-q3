@@ -52,11 +52,33 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1.0'
-          memory: '1920MB'
+          cpus: '0.75'
+          memory: '1GB'
     command:
       [
         "postgres",
         "-c",
         "config_file=/etc/postgresql/postgresql.conf"
       ]
+  pgbouncer:
+    container_name: pgbouncer
+    image: bitnami/pgbouncer:latest
+    ports:
+      - "6432:6432"
+    depends_on:
+      - db
+    volumes:
+      - ./pgbouncer.ini:/bitnami/pgbouncer/conf/pgbouncer.ini
+      - ./userlist.txt:/etc/pgbouncer/userlist.txt
+    environment:
+      - PGBOUNCER_DATABASES=*:host=db port=5432
+      - POSTGRESQL_HOST=db
+      - POSTGRESQL_PASSWORD=rinhadebackend
+      - PGBOUNCER_LISTEN_PORT=6432
+      - PGBOUNCER_LISTEN_ADDR=*
+      - PGBOUNCER_ADMIN_USERS=admin
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '920MB'

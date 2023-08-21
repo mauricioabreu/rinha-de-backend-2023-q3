@@ -4,7 +4,8 @@ config({ "development", "production" }, {
   port = 80,
   server = "nginx",
   postgres = {
-    host = "db",
+    host = "pgbouncer",
+    port = 6432,
     user = "rinhadebackend",
     password = "rinhadebackend",
     database = "rinhadebackend"
