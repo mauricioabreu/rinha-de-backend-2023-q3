@@ -59,7 +59,7 @@ class RinhaBackendSimulation
     buscaPessoas.inject(
       constantUsersPerSec(2).during(25.seconds), // warm up
 
-      rampUsersPerSec(6).to(50).during(3.minutes) // lezzz go!!!
+      rampUsersPerSec(6).to(60).during(3.minutes) // lezzz go!!!
     ),
     buscaInvalidaPessoas.inject(
       constantUsersPerSec(2).during(25.seconds), // warm up
