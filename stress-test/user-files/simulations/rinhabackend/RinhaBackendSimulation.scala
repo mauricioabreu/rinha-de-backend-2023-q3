@@ -54,7 +54,7 @@ class RinhaBackendSimulation
       constantUsersPerSec(2).during(10.seconds), // warm up
       constantUsersPerSec(5).during(15.seconds).randomized, // are you ready?
 
-      rampUsersPerSec(6).to(320).during(3.minutes) // lezzz go!!!
+      rampUsersPerSec(6).to(350).during(3.minutes) // lezzz go!!!
     ),
     buscaPessoas.inject(
       constantUsersPerSec(2).during(25.seconds), // warm up
