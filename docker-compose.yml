@@ -19,6 +19,8 @@ services:
         limits:
           cpus: '0.1'
           memory: '512MB'
+    networks:
+      - rinhadebackend
   api2:
     <<: *api
     container_name: api2
@@ -40,6 +42,8 @@ services:
         limits:
           cpus: '0.1'
           memory: '128MB'
+    networks:
+      - rinhadebackend
   db:
     container_name: db
     image: postgres:15.4
@@ -64,6 +68,8 @@ services:
         "-c",
         "config_file=/etc/postgresql/postgresql.conf"
       ]
+    networks:
+      - rinhadebackend
   pgbouncer:
     container_name: pgbouncer
     image: bitnami/pgbouncer:latest
@@ -86,3 +92,8 @@ services:
         limits:
           cpus: '0.2'
           memory: '920MB'
+    networks:
+      - rinhadebackend
+
+networks:
+  rinhadebackend:
