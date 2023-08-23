@@ -10,7 +10,8 @@ services:
     ports:
       - "80"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     command: [ "lapis", "server" ]
     environment:
       - LAPIS_ENVIRONMENT=${API_ENVIRONMENT:-development}
@@ -21,6 +22,12 @@ services:
           memory: '512MB'
     networks:
       - rinhadebackend
+    healthcheck:
+      test: curl -o /dev/null -s --retry 0 --head http://localhost:80/contagem-pessoas || exit 1
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
   api2:
     <<: *api
     container_name: api2
@@ -33,8 +40,10 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
-      - api1
-      - api2
+      api1:
+        condition: service_healthy
+      api2:
+        condition: service_healthy
     ports:
       - "9999:9999"
     deploy:
@@ -44,6 +53,7 @@ services:
           memory: '128MB'
     networks:
       - rinhadebackend
+
   db:
     container_name: db
     image: postgres:15.4
@@ -70,13 +80,21 @@ services:
       ]
     networks:
       - rinhadebackend
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U rinhadebackend" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
   pgbouncer:
     container_name: pgbouncer
     image: bitnami/pgbouncer:latest
     ports:
       - "6432:6432"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     volumes:
       - ./pgbouncer.ini:/bitnami/pgbouncer/conf/pgbouncer.ini
       - ./userlist.txt:/etc/pgbouncer/userlist.txt
