@@ -54,12 +54,12 @@ class RinhaBackendSimulation
       constantUsersPerSec(2).during(10.seconds), // warm up
       constantUsersPerSec(5).during(15.seconds).randomized, // are you ready?
 
-      rampUsersPerSec(6).to(420).during(3.minutes) // lezzz go!!!
+      rampUsersPerSec(6).to(450).during(3.minutes) // lezzz go!!!
     ),
     buscaPessoas.inject(
       constantUsersPerSec(2).during(25.seconds), // warm up
 
-      rampUsersPerSec(6).to(60).during(3.minutes) // lezzz go!!!
+      rampUsersPerSec(6).to(80).during(3.minutes) // lezzz go!!!
     ),
     buscaInvalidaPessoas.inject(
       constantUsersPerSec(2).during(25.seconds), // warm up
