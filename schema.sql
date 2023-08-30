@@ -8,7 +8,9 @@ CREATE TABLE IF NOT EXISTS pessoas (
     nome VARCHAR(100) NOT NULL,
     nascimento DATE NOT NULL,
     stack VARCHAR(1024),
-    term_search VARCHAR(1158) GENERATED ALWAYS AS (LOWER(nome) || ' ' || LOWER(apelido) || ' ' || LOWER(stack)) STORED
+    term_search VARCHAR(1158) GENERATED ALWAYS AS (
+        LOWER(nome || ' ' || apelido || ' ' || stack)
+    ) STORED
 );
 
-CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_term_search ON PESSOAS USING GIN (term_search gin_trgm_ops);
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_term_search ON PESSOAS USING GIST (term_search gist_trgm_ops);
